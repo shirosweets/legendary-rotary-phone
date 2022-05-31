@@ -82,6 +82,9 @@ endif
 # Main target
 all: $O/$(TARGET)
 	$(Q)$(LN) $O/$(TARGET) .
+	
+run: all
+	./$(TARGET)
 
 $O/$(TARGET): $(OBJS)  $(wildcard $(EXTRA_OBJS)) Makefile $(CONFIGFILE)
 	@$(MKPATH) $O
