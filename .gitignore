@@ -1,0 +1,6 @@
+results/**
+.project
+.qtenvrc
+lab4-kickstarter
+out/
+packet_m.h
