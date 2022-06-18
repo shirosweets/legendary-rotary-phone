@@ -14,6 +14,7 @@ simple Net
     parameters:
         @display("i=block/dispatch");
         int interfaces;
+        int hopsToLive;
     gates:
         inout toApp;
         inout toLnk[];
@@ -44,6 +45,7 @@ module Node
             parameters:
                 @display("p=75,120");
                 interfaces=interfaces;
+                hopsToLive = 4;
         }
         lnk[interfaces]: Lnk {
             parameters:

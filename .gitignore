@@ -4,5 +4,7 @@ results/**
 lab4-kickstarter
 out/
 packet_m.h
+**/General.anf
+packet_m.cc
 
 ignore_**

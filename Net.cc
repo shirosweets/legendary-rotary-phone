@@ -43,6 +43,7 @@ void Net::handleMessage(cMessage *msg) {
 
     if (pkt->getDestination() == this->getParentModule()->getIndex()) {
     // We are the destination
+    	pkt->setHopCount(pkt->getHopCount() + 1);
     	send(msg, "toApp$o");
     }
     else {
@@ -54,7 +55,11 @@ void Net::handleMessage(cMessage *msg) {
     	else {
     		// No somos el origen
     		pkt->setHopCount(pkt->getHopCount() + 1);
-    		send(pkt, "toLnk$o", 1 - getArrivalGateIndex(msg));
+    		if (par("hopsToLive").intValue() - pkt->getHopCount() > 0) {
+				send(pkt, "toLnk$o", 1 - getArrivalGateIndex(msg));
+    		} else {
+    			delete(pkt);
+    		}
     	}
     }
 }
