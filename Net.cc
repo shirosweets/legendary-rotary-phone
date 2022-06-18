@@ -9,7 +9,7 @@ using namespace omnetpp;
 
 class Net: public cSimpleModule {
 private:
-	cMessage *hello;
+	int getArrivalGateIndex(cMessage *msg);
 public:
     Net();
     virtual ~Net();
@@ -42,15 +42,28 @@ void Net::handleMessage(cMessage *msg) {
     Packet *pkt = (Packet *) msg;
 
     if (pkt->getDestination() == this->getParentModule()->getIndex()) {
+    // We are the destination
     	send(msg, "toApp$o");
     }
     else {
     	if(pkt->getSource() == this->getParentModule()->getIndex()){
-    		send(pkt, "toLnk$o", 0);
+    		// Somos el origen
+    		send(pkt->dup(), "toLnk$o", 0);
+    		send(pkt, "toLnk$o", 1);
     	}
     	else {
+    		// No somos el origen
     		pkt->setHopCount(pkt->getHopCount() + 1);
-    		send(pkt, "toLnk$o", 0);
+    		send(pkt, "toLnk$o", 1 - getArrivalGateIndex(msg));
     	}
     }
+}
+
+int Net::getArrivalGateIndex(cMessage *msg) {
+	for (int i=0; i<par("interfaces").intValue(); i++) {
+		if (msg->arrivedOn("toLnk$i", i)) {
+			return i;
+		}
+	}
+	return -1;
 }

@@ -13,6 +13,7 @@ simple Net
 {
     parameters:
         @display("i=block/dispatch");
+        int interfaces;
     gates:
         inout toApp;
         inout toLnk[];
@@ -42,6 +43,7 @@ module Node
         net: Net {
             parameters:
                 @display("p=75,120");
+                interfaces=interfaces;
         }
         lnk[interfaces]: Lnk {
             parameters:

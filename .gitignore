@@ -4,3 +4,5 @@ results/**
 lab4-kickstarter
 out/
 packet_m.h
+
+ignore_**
