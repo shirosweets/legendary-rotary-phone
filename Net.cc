@@ -12,11 +12,12 @@ class Net: public cSimpleModule {
 private:
 	cMessage *startHelloEvent;
 	int getArrivalGateIndex(cMessage *msg);
-	bool isHelloChainComplete(Hello * hello);
-	void addSelfToHelloChain(Hello * hello);
+	bool isHelloChainComplete(Hello *hello);
+	void addSelfToHelloChain(Hello *hello);
 	void handleDataPacket(Packet *pkt);
 	void handleHelloPacket(Hello *hello);
 	void saveTopologyData(Hello *hello);
+	int getOutGateIndex(Packet *pkt);
 	bool isTopologyKnown;
 public:
     Net();
@@ -109,7 +110,7 @@ void Net::handleDataPacket(Packet *pkt) {
     		// No somos el origen
     		pkt->setHopCount(pkt->getHopCount() + 1);
     		if (par("hopsToLive").intValue() - pkt->getHopCount() > 0) {
-				send(pkt, "toLnk$o", 1 - getArrivalGateIndex(pkt));
+				send(pkt, "toLnk$o", getOutGateIndex(pkt));
     		} else {
     			delete(pkt);
     		}
@@ -148,4 +149,8 @@ void Net::handleHelloPacket(Hello *hello) {
 
 void Net::saveTopologyData(Hello *hello) {
 	std::cout << "Saving Topology Data in node: " << this->getParentModule()->getIndex() << "\n";
+}
+
+int Net::getOutGateIndex(Packet *pkt) {
+	return 1 - getArrivalGateIndex(pkt);
 }

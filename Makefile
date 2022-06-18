@@ -33,7 +33,7 @@ OBJS = $O/App.o $O/Lnk.o $O/Net.o $O/packet_m.o $O/hello_m.o
 
 # Message files
 MSGFILES = \
-    packet.msg
+    packet.msg hello.msg
 
 # SM files
 SMFILES =
