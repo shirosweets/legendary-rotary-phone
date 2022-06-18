@@ -12,6 +12,7 @@ private:
     cMessage *sendMsgEvent;
     cStdDev delayStats;
     cOutVector delayVector;
+    cOutVector hopsCount;
 public:
     App();
     virtual ~App();
@@ -43,6 +44,7 @@ void App::initialize() {
     // Initialize statistics
     delayStats.setName("TotalDelay");
     delayVector.setName("Delay");
+    hopsCount.setName("Hops");
 }
 
 void App::finish() {
@@ -59,6 +61,7 @@ void App::handleMessage(cMessage *msg) {
         Packet *pkt = new Packet("packet",this->getParentModule()->getIndex());
         pkt->setByteLength(par("packetByteSize"));
         pkt->setSource(this->getParentModule()->getIndex());
+        pkt->setHopCount(0);
         pkt->setDestination(par("destination"));
 
         // send to net layer
@@ -75,6 +78,8 @@ void App::handleMessage(cMessage *msg) {
         simtime_t delay = simTime() - msg->getCreationTime();
         delayStats.collect(delay);
         delayVector.record(delay);
+        Packet *pkt = (Packet *) msg;
+        hopsCount.record(pkt->getHopCount());
         // delete msg
         delete (msg);
     }
