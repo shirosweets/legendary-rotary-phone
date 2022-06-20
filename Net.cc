@@ -60,7 +60,7 @@ void Net::finish() {
 void Net::handleMessage(cMessage *msg) {
 	if (msg == startHelloEvent) {
 		Hello * hello = new Hello();
-		hello->setKind(2);
+		hello->setKind(31000);
 		hello->setByteLength(8 * 4);
 		for (int i=0; i<8; i++) {
 			hello->setNodes(i, -1);
@@ -69,7 +69,7 @@ void Net::handleMessage(cMessage *msg) {
 		send(hello, "toLnk$o", 0);
 	} else {
 		Packet *pkt = (Packet *) msg;
-		if (pkt->getKind() == 2) {
+		if (pkt->getKind() == 31000) {
 			handleHelloPacket((Hello*)msg);
 		} else {
 			handleDataPacket(pkt);
