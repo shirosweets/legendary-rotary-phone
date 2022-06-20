@@ -5,6 +5,7 @@
 #include <omnetpp.h>
 #include <packet_m.h>
 #include "hello_m.h"
+#define RING_SIZE 8
 
 using namespace omnetpp;
 
@@ -16,9 +17,10 @@ private:
 	void addSelfToHelloChain(Hello *hello);
 	void handleDataPacket(Packet *pkt);
 	void handleHelloPacket(Hello *hello);
-	void saveTopologyData(Hello *hello);
+	void saveTopologyData();
 	int getOutGateIndex(Packet *pkt);
 	bool isTopologyKnown;
+	int * routingTable;
 public:
     Net();
     virtual ~Net();
@@ -41,6 +43,7 @@ Net::~Net() {
 void Net::initialize() {
 	startHelloEvent = new cMessage("startHelloEvent");
 	isTopologyKnown = false;
+	routingTable = NULL;
 	if (this->getParentModule()->getIndex() == 0) {
 		// Inicializamos la exploración de topología
 		scheduleAt(simTime() + 0, startHelloEvent);
@@ -101,7 +104,8 @@ void Net::handleDataPacket(Packet *pkt) {
     	send(pkt, "toApp$o");
     }
     else {
-    	if(pkt->getSource() == this->getParentModule()->getIndex()){
+    	send(pkt, "toLnk$o", routingTable[pkt->getDestination()]);
+/*   	if(pkt->getSource() == this->getParentModule()->getIndex()){
     		// Somos el origen
     		send(pkt->dup(), "toLnk$o", 0);
     		send(pkt, "toLnk$o", 1);
@@ -114,16 +118,15 @@ void Net::handleDataPacket(Packet *pkt) {
     		} else {
     			delete(pkt);
     		}
-    	}
+*/    	}
     }
-}
 
 void Net::handleHelloPacket(Hello *hello) {
 	if (this->getParentModule()->getIndex() == 0) {
 		// Soy el iniciador
 		std::cout << "// Soy el iniciador\n";
 		if (!isTopologyKnown) {
-			saveTopologyData(hello);
+			saveTopologyData();
 			isTopologyKnown = true;
 			send(hello->dup(), "toLnk$o", 0);
 			send(hello, "toLnk$o", 1);
@@ -136,7 +139,7 @@ void Net::handleHelloPacket(Hello *hello) {
 			if (isTopologyKnown) {
 				delete(hello);
 			} else {
-				saveTopologyData(hello);
+				saveTopologyData();
 				isTopologyKnown = true;
 				send(hello, "toLnk$o", 1 - getArrivalGateIndex(hello));
 			}
@@ -147,8 +150,24 @@ void Net::handleHelloPacket(Hello *hello) {
 	}
 }
 
-void Net::saveTopologyData(Hello *hello) {
+void Net::saveTopologyData() {
 	std::cout << "Saving Topology Data in node: " << this->getParentModule()->getIndex() << "\n";
+	routingTable = new int[8];
+	int m,k;
+	int leftDistance;
+	int rightDistance;
+	int i = this->getParentModule()->getIndex();
+	for(unsigned int j = 0; j<RING_SIZE; j++){
+		m = 1;
+		k = i<=j ? 0 : 1;
+		leftDistance = k*m*(i-j) + (1-k)*((RING_SIZE - 1)+m*(i-j));
+		m = -1;
+		rightDistance = k*m*(i-j) + (1-k)*((RING_SIZE - 1)+m*(i-j));
+		routingTable[j] = leftDistance <= rightDistance ? 1 : 0;
+	}
+	for(unsigned int j = 0; j<RING_SIZE; j++){
+		std::cout << "For node i " << i << " and j " << j << " is " << routingTable[j] << "\n";
+	}
 }
 
 int Net::getOutGateIndex(Packet *pkt) {
