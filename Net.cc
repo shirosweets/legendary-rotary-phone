@@ -51,6 +51,10 @@ void Net::initialize() {
 }
 
 void Net::finish() {
+	delete(startHelloEvent);
+	if(routingTable != NULL){
+		delete(routingTable);
+	}
 }
 
 void Net::handleMessage(cMessage *msg) {
@@ -105,20 +109,7 @@ void Net::handleDataPacket(Packet *pkt) {
     }
     else {
     	send(pkt, "toLnk$o", routingTable[pkt->getDestination()]);
-/*   	if(pkt->getSource() == this->getParentModule()->getIndex()){
-    		// Somos el origen
-    		send(pkt->dup(), "toLnk$o", 0);
-    		send(pkt, "toLnk$o", 1);
     	}
-    	else {
-    		// No somos el origen
-    		pkt->setHopCount(pkt->getHopCount() + 1);
-    		if (par("hopsToLive").intValue() - pkt->getHopCount() > 0) {
-				send(pkt, "toLnk$o", getOutGateIndex(pkt));
-    		} else {
-    			delete(pkt);
-    		}
-*/    	}
     }
 
 void Net::handleHelloPacket(Hello *hello) {
@@ -152,19 +143,21 @@ void Net::handleHelloPacket(Hello *hello) {
 
 void Net::saveTopologyData() {
 	std::cout << "Saving Topology Data in node: " << this->getParentModule()->getIndex() << "\n";
-	routingTable = new int[8];
+	routingTable = new int[RING_SIZE];
 	int m,k;
+	int n = RING_SIZE - 1;
 	int leftDistance;
 	int rightDistance;
 	int i = this->getParentModule()->getIndex();
 	for(unsigned int j = 0; j<RING_SIZE; j++){
 		m = 1;
 		k = i<=j ? 0 : 1;
-		leftDistance = k*m*(i-j) + (1-k)*((RING_SIZE - 1)+m*(i-j));
-		m = -1;
-		rightDistance = k*m*(i-j) + (1-k)*((RING_SIZE - 1)+m*(i-j));
-		routingTable[j] = leftDistance <= rightDistance ? 1 : 0;
+		leftDistance = n*(m+k) + 2*m*(i-j-k*n)- i + j;
+		m = 0;
+		rightDistance = n*(m+k) + 2*m*(i-j-k*n)- i + j;
+		routingTable[j] = leftDistance <= rightDistance ? 0 : 1;
 	}
+	routingTable[i] = -1;
 	for(unsigned int j = 0; j<RING_SIZE; j++){
 		std::cout << "For node i " << i << " and j " << j << " is " << routingTable[j] << "\n";
 	}
