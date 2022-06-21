@@ -1,8 +1,0 @@
-make --dry-run --always-make --keep-going --print-directory
-make: Entering directory '/home/shirosweets/Redes/redes22lab4g24'
-make: Leaving directory '/home/shirosweets/Redes/redes22lab4g24'
- 
-make: opp_configfilepath: No such file or directory
-make: opp_configfilepath: No such file or directory
-Makefile:56: *** Config file '' does not exist -- add the OMNeT++ bin directory to the path so that opp_configfilepath can be found, or set the OMNETPP_CONFIGFILE variable to point to Makefile.inc.  Stop.
-
