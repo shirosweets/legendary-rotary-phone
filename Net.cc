@@ -49,6 +49,10 @@ Net::Net() {
 }
 
 Net::~Net() {
+	delete(startHelloEvent);
+	if(routingTable != NULL){
+		delete(routingTable);
+	}
 }
 
 void Net::initialize() {
@@ -65,10 +69,6 @@ void Net::initialize() {
 }
 
 void Net::finish() {
-	delete(startHelloEvent);
-	if(routingTable != NULL){
-		delete(routingTable);
-	}
 }
 
 void Net::handleMessage(cMessage *msg) {
@@ -102,6 +102,7 @@ int Net::getArrivalGateIndex(cMessage *msg) {
 
 void Net::handleDataPacket(Packet *pkt) {
 	pkt->setHopCount(pkt->getHopCount() + 1);
+	// std::cout << 
     if (pkt->getDestination() == this->getParentModule()->getIndex()) {
     	// We are the destination
     	send(pkt, "toApp$o");
@@ -128,7 +129,7 @@ void Net::reroutePacket(Packet *pkt) {
 
 /* SHORT FLOOD FUNCTIONS */
 
-void handleRerouteForShortFlood(Packet *pkt) {
+void Net::handleRerouteForShortFlood(Packet *pkt) {
 	if(pkt->getSource() == this->getParentModule()->getIndex()){
 		// Somos el origen
 		send(pkt->dup(), "toLnk$o", 0);
