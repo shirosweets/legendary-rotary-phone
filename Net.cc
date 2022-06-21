@@ -49,7 +49,7 @@ Net::Net() {
 }
 
 Net::~Net() {
-	delete(startHelloEvent);
+	cancelAndDelete(startHelloEvent);
 	if(routingTable != NULL){
 		delete(routingTable);
 	}
