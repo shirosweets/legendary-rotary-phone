@@ -64,7 +64,7 @@ Se pide incluir en el modelo dado todas las estadísticas necesarias para analiz
 1. **[Caso 1]** Se deberá correr el modelo con las fuentes de tráfico configuradas (`node[0]` y `node[2]` transmitiendo datos a `node[5]`) y estudiar las métricas tomadas.
     - ¿Qué métricas se obtienen?
     - ¿Cómo es el uso de los recursos de la red? ¿Se puede mejorar?
-2. **[Caso 2]** Asuma ahora que todos los `nodos (0, 1, 2, 3, 4, 6, 7)` generan tráfico hacia el `node[5]` con `packetByteSize` e `interArrivalTime` idénticos entre todos los nodos. 
+2. **[Caso 2]** Asuma ahora que todos los `nodos (0, 1, 2, 3, 4, 6, 7)` generan tráfico hacia el `node[5]` con `packetByteSize` e `interArrivalTime` idénticos entre todos los nodos.
     - Explore y determine a partir de qué valor de `interArrivalTime` se puede garantizar un equilibrio o estabilidad en la red. Justifique.
 
 ```cpp

@@ -8,3 +8,4 @@ packet_m.h
 packet_m.cc
 
 ignore_**
+.vscode/*
