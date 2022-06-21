@@ -102,7 +102,8 @@ int Net::getArrivalGateIndex(cMessage *msg) {
 
 void Net::handleDataPacket(Packet *pkt) {
 	pkt->setHopCount(pkt->getHopCount() + 1);
-	// std::cout << 
+	std::cout << "handling data packet on node[" << this->getParentModule()->getIndex();
+	std::cout << "] with destination of node[" << pkt->getDestination() << "]\n";
     if (pkt->getDestination() == this->getParentModule()->getIndex()) {
     	// We are the destination
     	send(pkt, "toApp$o");
