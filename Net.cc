@@ -7,20 +7,31 @@
 #include "hello_m.h"
 #define RING_SIZE 8
 
+#define CLOCKWISE_ALGORITHM 0
+#define SHORT_FLOOD_ALGORITHM 1
+#define CHAINED_HELLO_ALGORITHM 2
+
+#define CURRENT_ALGORITM CLOCKWISE_ALGORITHM
+
 using namespace omnetpp;
 
 class Net: public cSimpleModule {
 private:
-	cMessage *startHelloEvent;
-	int getArrivalGateIndex(cMessage *msg);
-	bool isHelloChainComplete(Hello *hello);
-	void addSelfToHelloChain(Hello *hello);
 	void handleDataPacket(Packet *pkt);
-	void handleHelloPacket(Hello *hello);
-	void saveTopologyData();
-	int getOutGateIndex(Packet *pkt);
+	void reroutePacket(Packet *pkt);
+	int getArrivalGateIndex(cMessage *msg);
+
+	// Short Flood Algorithm
+	void handleRerouteForShortFlood(Packet *pkt);
+
+	// Chained Hello Algorithm
 	bool isTopologyKnown;
 	int * routingTable;
+	cMessage *startHelloEvent;
+	void handleHelloPacket(Hello *hello);
+	void addSelfToHelloChain(Hello *hello);
+	bool isHelloChainComplete(Hello *hello);
+	void saveTopologyData();
 public:
     Net();
     virtual ~Net();
@@ -44,9 +55,12 @@ void Net::initialize() {
 	startHelloEvent = new cMessage("startHelloEvent");
 	isTopologyKnown = false;
 	routingTable = NULL;
-	if (this->getParentModule()->getIndex() == 0) {
-		// Inicializamos la exploración de topología
-		scheduleAt(simTime() + 0, startHelloEvent);
+
+	if (CURRENT_ALGORITM == CHAINED_HELLO_ALGORITHM) {
+		if (this->getParentModule()->getIndex() == 0) {
+			// Inicializamos la exploración de topología
+			scheduleAt(simTime() + 0, startHelloEvent);
+		}
 	}
 }
 
@@ -86,6 +100,50 @@ int Net::getArrivalGateIndex(cMessage *msg) {
 	return -1;
 }
 
+void Net::handleDataPacket(Packet *pkt) {
+	pkt->setHopCount(pkt->getHopCount() + 1);
+    if (pkt->getDestination() == this->getParentModule()->getIndex()) {
+    	// We are the destination
+    	send(pkt, "toApp$o");
+    } else {
+    	reroutePacket(pkt);
+	}
+}
+
+void Net::reroutePacket(Packet *pkt) {
+	switch (CURRENT_ALGORITM) {
+	case CLOCKWISE_ALGORITHM:
+		send(pkt, "toLnk$o", 0);
+		break;
+	case SHORT_FLOOD_ALGORITHM:
+		handleRerouteForShortFlood(pkt);
+		break;
+	case CHAINED_HELLO_ALGORITHM:
+		send(pkt, "toLnk$o", routingTable[pkt->getDestination()]);
+		break;
+	default:
+		break;
+	}
+}
+
+/* SHORT FLOOD FUNCTIONS */
+
+void handleRerouteForShortFlood(Packet *pkt) {
+	if(pkt->getSource() == this->getParentModule()->getIndex()){
+		// Somos el origen
+		send(pkt->dup(), "toLnk$o", 0);
+		send(pkt, "toLnk$o", 1);
+	} else if (par("hopsToLive").intValue() - pkt->getHopCount() > 0) {
+		// No somos el origen y todavía hay hops disponibles
+		send(pkt, "toLnk$o", 1 - getArrivalGateIndex(pkt));
+	} else {
+		// No somos el origen y ya no hay hops disponibles
+		delete(pkt);
+	}
+}
+
+/* CHAINED HELLO FUNCTIONS */
+
 bool Net::isHelloChainComplete(Hello * hello) {
 	return hello->getNodes(7) != -1;
 }
@@ -100,17 +158,6 @@ void Net::addSelfToHelloChain(Hello * hello) {
 		}
 	}
 }
-
-void Net::handleDataPacket(Packet *pkt) {
-    if (pkt->getDestination() == this->getParentModule()->getIndex()) {
-    // We are the destination
-    	pkt->setHopCount(pkt->getHopCount() + 1);
-    	send(pkt, "toApp$o");
-    }
-    else {
-    	send(pkt, "toLnk$o", routingTable[pkt->getDestination()]);
-    	}
-    }
 
 void Net::handleHelloPacket(Hello *hello) {
 	if (this->getParentModule()->getIndex() == 0) {
@@ -158,11 +205,4 @@ void Net::saveTopologyData() {
 		routingTable[j] = leftDistance <= rightDistance ? 0 : 1;
 	}
 	routingTable[i] = -1;
-	for(unsigned int j = 0; j<RING_SIZE; j++){
-		std::cout << "For node i " << i << " and j " << j << " is " << routingTable[j] << "\n";
-	}
-}
-
-int Net::getOutGateIndex(Packet *pkt) {
-	return 1 - getArrivalGateIndex(pkt);
 }
