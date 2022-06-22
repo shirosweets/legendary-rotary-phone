@@ -36,7 +36,7 @@ Una red de anillo es una topología de red en la que cada nodo se conecta exacta
 > Hipotesis generales sobre el algoritmo: 
   Este algortimos no realiza ninguna evaluación sobre el paquete ni sobre la topologia de la red, solo comprueba si el nodo actual es el destino en cuyo caso lo envia a la capa de aplicacion en caso contrario envia el paquete siempre hacia la linea en sentido horario del nodo.
   Esto puede provocar a simple vista un completa falta de uso de la caracteristica full-duplex de la red, en direccion opuesta hacia donde se mandan los paquetes. 
-  Ya que en ninguna circunstancia se envia paquetes hacia el sentido horario, esto provoca un general desuso del ancho de banda de la red.
+  Ya que en ninguna circunstancia se envian paquetes en sentido anti-horario, esto provoca un general desuso del ancho de banda de la red.
 
 ## Caso I: Dos nodos envían paquetes
 
@@ -46,33 +46,33 @@ Una red de anillo es una topología de red en la que cada nodo se conecta exacta
  En este caso, se puede contemplar que el nodo 2 congestionara inecesariamente el lado derecho del anillo, ya que existe un una mejor ruta; en particular aumentando el uso de los buffers del nodo 0 el cual es un punto donde se encuetran los paquetes generados por el nodo 2 y del mismo nodo 0.
  Esto provocara un aumento del delay medio de los paquetes cuando llegan a destino (Nodo 5).
 
-> Resultados:.
+> Resultados:
   <!-- Tabla de Datos Caso I-->
 
 ## Caso II: Todos envían paquetes
 
-> Todos los paquetes menos el 5 envían paquetes al nodo 5
+> Todos los nodos menos el 5 envían paquetes al nodo 5
 
 > Hipotesis sobre el caso II:
 En este caso, se nota de manera mas evidente la congestión de la red, ya que todos los nodos envian en sentido horario incluso el nodo que esta a un solo un salto del destino.
 Esto aumentara el delay medio de todos los paquetes enviados por los distintos nodos, viendose los mas afectados los del nodo 4 el cual es el nodo en inmediatamente despues (en sentido horario) del nodo 5.
 
-> Resultados:.
+> Resultados:
   <!-- Tabla de Datos Caso II-->
 
 ## Caso III: Random
 
 > Cada paquete puede enviar paquetes a cualquier otro siguiendo una distribución uniforme
 
-Hipotesis sobre el caso II:
+Hipotesis sobre el caso III:
  En este caso, al ser aleatorio, lo unico que se puede asegurar es el desuso de la caracteristica full-duplex de la red.
 
-> Resultados:.
+> Resultados:
   <!-- Tabla de Datos Caso III-->
 
 ## Conclusión
 
-# Algoritmo 1: Short Flood
+# Algoritmo 1: Selective Flood
 
 ## Suposiciones
 
@@ -98,21 +98,43 @@ Este proceso ocurre sucesivamente hasta encontrar el nodo de destino `y`.
 La *cantidad de máxima de hoops* permite que la inundación utilice los mínimos recursos posibles mientras también se garantiza que un paquete llegue a cualquier destino del anillo.
 
 > Hipotesis generales sobre el algoritmo:
-  En este algortimo se utiliza la idea de inundación selectiva, esto provoca una mejora significativa en el delay medio de los paquetes, ya que no solo se tiene en cuenta la ruta en sentido horario sino también en sentido anti-horario.
-  De la misma manera, se congestionara la red por la naturaleza de la inundación.
+  En este algortimo se utiliza la idea de inundación selectiva, esto provoca una mejora significativa en el delay medio de los paquetes, ya que no solo se tiene en cuenta la ruta en sentido horario sino también en sentido anti-horario, esto implicara un aprovechamiento de los canales full-duplex.
+  De la misma manera, congestionara la red por mera naturaleza de la inundación, aumentando asi la utilización de los buffers de todos los nodos.
+  Comparando con el algortimo original habra una minima mejora en la congestión o ninguna, dependiendo el caso, gracias a la caracteristica de los paquietes a ser eliminados despues de cierta cantidad de saltos. 
 
 # Análisis
 ## Caso I: Dos nodos envían paquetes
 
 > El nodo 0 y nodo 2 envían paquetes al nodo 5
 
+> Hipotesis sobre el caso I:
+  En comparación con el caso I del algoritmo original se notara una mejora en el delay medio de los paquetes enviados desde el nodo 2 ya que se tomara la mejor ruta la cual es la anti-horaria hacia el nodo 5.
+
+Resultados:
+  <!-- Tabla de Datos Caso I-->
+
 ## Caso II: Todos envían paquetes
 
-> Todos los paquetes menos el 5 envían paquetes al nodo 5
+> Todos los nodo menos el 5 envían paquetes al nodo 5
+
+> Hipotesis sobre el caso II:
+  En este caso se contempla significativamente la mejora en el delay medio de los paquetes enviados por los nodos de la mitad izquirda del anillos (Nodos 1, 2, 3 y 4)
+  Devido a que seleccionan la mejor ruta hacia su destino.
+  
+
+Resultados:
+  <!-- Tabla de Datos Caso II-->
 
 ## Caso III: Random
 
 > Cada paquete puede enviar paquetes a cualquier otro siguiendo una distribución uniforme
+
+> Hipotesis sobre el caso III:
+  En comparación con el algoritmo original, todos los paquetes tomaran la mejor ruta a cualesquiera sea su destino.
+  El problema en este caso es el aumento de la congestión de la red el cual podria provocar o no aumento del delay medio de los paquetes.
+
+Resultados:
+  <!-- Tabla de Datos Caso III-->
 
 ## Conclusión
 
@@ -150,22 +172,45 @@ La *cantidad de máxima de hoops* permite que la inundación utilice los mínimo
 
 5. Cada nodo recibe la información de la topología de la red y calcula la mejor ruta para cada nodo. Si ya tiene la topología guardada, ignora el paquete y no lo retransmite (esto corta la inundación cuando ya todos tengan la información).
 
+> Hipotesis generales sobre el algoritmo:
+Este algoritmo es el mejor comparado con los 2 anteriores debido a que no solo utiliza la caracteristica full-duplex de las lineas si no que tambien la usa de manera eficiente.
+Esto implica que se dejara de congestionar la red de manera masiva como lo hacia la inundación selectiva, mejorando asi significativamente el delay medio de los paquetes, se puede dejar de utilizar la cantidad de saltos como medida de control ya que siempre se enviaran por la mejor ruta, solo se utilizaran como medida de estudio.
+Este algortimo provoca un minimo overhead con la inundación de los paquetes `Hello` el cual en nuestro caso de estudio no lo provoca ya que el intervalo de generacion es 1 y el reconocimiento topologico de la red se realiza antes de que el primer paquete de datos se genere.
+
 ## Caso I: Dos nodos envían paquetes
 
 > El nodo 0 y nodo 2 envían paquetes al nodo 5
+
+> Hipotesis sobre el caso I:
+En este caso, se lograra el enrutamiento optimo para ambos nodos dando asi un delay medio ligeramente mejor al del algortimo de inundación selectiva pero sin la contraparte de  congestionar la red.
+
+Resultados:
+  <!-- Tabla de Datos Caso I-->
 
 ## Caso II: Todos envían paquetes
 
 > Todos los paquetes menos el 5 envían paquetes al nodo 5
 
+> Hipotesis sobre el caso II:
+Mejoraran los delay medios de todos los paquetes de la red asi como la disminución del uso de buffers.
+
+Resultados:
+  <!-- Tabla de Datos Caso II-->
+
 ## Caso III: Random
 
 > Cada paquete puede enviar paquetes a cualquier otro siguiendo una distribución uniforme
 
+> Hipotesis sobre el caso III:
+Ya que este algortimo es optimo para esta red, los paquetes siempre se enviaran por la mejor ruta sin provocar congestión.
+
+Resultados:
+  <!-- Tabla de Datos Caso III-->
+
 ## Conclusión
 
 - Una vez conocida la topología de la red siempre se envía por la mejor ruta.
-- No se presenta el problema si la cantidad de nodos es impar o par a diferencia del algoritmo "Short Flood".
+- No se presenta el problema si la cantidad de nodos es impar o par a diferencia del algoritmo "Selective Flood".
 
 ## Mejoras posibles
 
