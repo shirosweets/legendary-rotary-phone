@@ -16,6 +16,9 @@
 
 ## Contenido
 
+- [Informe](#informe)
+- [Integrantes](#integrantes)
+  - [Contenido](#contenido)
 - [Abstract](#abstract)
 - [Modelo de anillo](#modelo-de-anillo)
 - [Algoritmo original](#algoritmo-original)
@@ -75,6 +78,8 @@ Posteriormente se realizó dos diseños e implementaciones de algoritmos de enru
 # Modelo de anillo
 
 Una red de anillo es una topología de red en la que cada nodo se conecta exactamente con dos nodos, formando así una única ruta continua.
+
+![Basic Net](../documents/assets/red/redBasic.png)
 
 # Algoritmo original
 
