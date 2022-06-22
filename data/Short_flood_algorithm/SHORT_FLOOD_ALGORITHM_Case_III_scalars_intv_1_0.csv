@@ -1,0 +1,99 @@
+run,type,module,name,attrname,attrvalue,value
+General-0-20220621-23:35:43-24663,runattr,,,configname,General,
+General-0-20220621-23:35:43-24663,runattr,,,datetime,20220621-23:35:43,
+General-0-20220621-23:35:43-24663,runattr,,,experiment,General,
+General-0-20220621-23:35:43-24663,runattr,,,inifile,omnetpp.ini,
+General-0-20220621-23:35:43-24663,runattr,,,iterationvars,,
+General-0-20220621-23:35:43-24663,runattr,,,iterationvarsf,,
+General-0-20220621-23:35:43-24663,runattr,,,measurement,,
+General-0-20220621-23:35:43-24663,runattr,,,network,Network,
+General-0-20220621-23:35:43-24663,runattr,,,processid,24663,
+General-0-20220621-23:35:43-24663,runattr,,,repetition,0,
+General-0-20220621-23:35:43-24663,runattr,,,replication,#0,
+General-0-20220621-23:35:43-24663,runattr,,,resultdir,results,
+General-0-20220621-23:35:43-24663,runattr,,,runnumber,0,
+General-0-20220621-23:35:43-24663,runattr,,,seedset,0,
+General-0-20220621-23:35:43-24663,param,,,Network.**.app.amountHosts,8,
+General-0-20220621-23:35:43-24663,param,,,Network.**.app.interArrivalTime,exponential(1),
+General-0-20220621-23:35:43-24663,param,,,Network.**.app.packetByteSize,125000,
+General-0-20220621-23:35:43-24663,param,,,Network.**.app.destination,"intuniform(0, 7)",
+General-0-20220621-23:35:43-24663,scalar,Network.node[0].app,Average delay,,,35.427166422508
+General-0-20220621-23:35:43-24663,scalar,Network.node[0].app,Number of packets,,,90
+General-0-20220621-23:35:43-24663,scalar,Network.node[0].app,Packets from 0 to 0,,,25
+General-0-20220621-23:35:43-24663,scalar,Network.node[0].app,Packets from 1 to 0,,,18
+General-0-20220621-23:35:43-24663,scalar,Network.node[0].app,Packets from 2 to 0,,,13
+General-0-20220621-23:35:43-24663,scalar,Network.node[0].app,Packets from 3 to 0,,,9
+General-0-20220621-23:35:43-24663,scalar,Network.node[0].app,Packets from 4 to 0,,,3
+General-0-20220621-23:35:43-24663,scalar,Network.node[0].app,Packets from 5 to 0,,,4
+General-0-20220621-23:35:43-24663,scalar,Network.node[0].app,Packets from 6 to 0,,,6
+General-0-20220621-23:35:43-24663,scalar,Network.node[0].app,Packets from 7 to 0,,,19
+General-0-20220621-23:35:43-24663,scalar,Network.node[1].app,Average delay,,,46.013700838773
+General-0-20220621-23:35:43-24663,scalar,Network.node[1].app,Number of packets,,,93
+General-0-20220621-23:35:43-24663,scalar,Network.node[1].app,Packets from 0 to 1,,,13
+General-0-20220621-23:35:43-24663,scalar,Network.node[1].app,Packets from 1 to 1,,,24
+General-0-20220621-23:35:43-24663,scalar,Network.node[1].app,Packets from 2 to 1,,,13
+General-0-20220621-23:35:43-24663,scalar,Network.node[1].app,Packets from 3 to 1,,,9
+General-0-20220621-23:35:43-24663,scalar,Network.node[1].app,Packets from 4 to 1,,,9
+General-0-20220621-23:35:43-24663,scalar,Network.node[1].app,Packets from 5 to 1,,,11
+General-0-20220621-23:35:43-24663,scalar,Network.node[1].app,Packets from 6 to 1,,,5
+General-0-20220621-23:35:43-24663,scalar,Network.node[1].app,Packets from 7 to 1,,,16
+General-0-20220621-23:35:43-24663,scalar,Network.node[2].app,Average delay,,,39.222577738273
+General-0-20220621-23:35:43-24663,scalar,Network.node[2].app,Number of packets,,,94
+General-0-20220621-23:35:43-24663,scalar,Network.node[2].app,Packets from 0 to 2,,,14
+General-0-20220621-23:35:43-24663,scalar,Network.node[2].app,Packets from 1 to 2,,,23
+General-0-20220621-23:35:43-24663,scalar,Network.node[2].app,Packets from 2 to 2,,,25
+General-0-20220621-23:35:43-24663,scalar,Network.node[2].app,Packets from 3 to 2,,,18
+General-0-20220621-23:35:43-24663,scalar,Network.node[2].app,Packets from 4 to 2,,,9
+General-0-20220621-23:35:43-24663,scalar,Network.node[2].app,Packets from 5 to 2,,,3
+General-0-20220621-23:35:43-24663,scalar,Network.node[2].app,Packets from 6 to 2,,,5
+General-0-20220621-23:35:43-24663,scalar,Network.node[2].app,Packets from 7 to 2,,,4
+General-0-20220621-23:35:43-24663,scalar,Network.node[3].app,Average delay,,,37.373749135756
+General-0-20220621-23:35:43-24663,scalar,Network.node[3].app,Number of packets,,,115
+General-0-20220621-23:35:43-24663,scalar,Network.node[3].app,Packets from 0 to 3,,,11
+General-0-20220621-23:35:43-24663,scalar,Network.node[3].app,Packets from 1 to 3,,,8
+General-0-20220621-23:35:43-24663,scalar,Network.node[3].app,Packets from 2 to 3,,,19
+General-0-20220621-23:35:43-24663,scalar,Network.node[3].app,Packets from 3 to 3,,,31
+General-0-20220621-23:35:43-24663,scalar,Network.node[3].app,Packets from 4 to 3,,,19
+General-0-20220621-23:35:43-24663,scalar,Network.node[3].app,Packets from 5 to 3,,,14
+General-0-20220621-23:35:43-24663,scalar,Network.node[3].app,Packets from 6 to 3,,,9
+General-0-20220621-23:35:43-24663,scalar,Network.node[3].app,Packets from 7 to 3,,,11
+General-0-20220621-23:35:43-24663,scalar,Network.node[4].app,Average delay,,,47.38700858574
+General-0-20220621-23:35:43-24663,scalar,Network.node[4].app,Number of packets,,,89
+General-0-20220621-23:35:43-24663,scalar,Network.node[4].app,Packets from 0 to 4,,,4
+General-0-20220621-23:35:43-24663,scalar,Network.node[4].app,Packets from 1 to 4,,,7
+General-0-20220621-23:35:43-24663,scalar,Network.node[4].app,Packets from 2 to 4,,,8
+General-0-20220621-23:35:43-24663,scalar,Network.node[4].app,Packets from 3 to 4,,,23
+General-0-20220621-23:35:43-24663,scalar,Network.node[4].app,Packets from 4 to 4,,,19
+General-0-20220621-23:35:43-24663,scalar,Network.node[4].app,Packets from 5 to 4,,,18
+General-0-20220621-23:35:43-24663,scalar,Network.node[4].app,Packets from 6 to 4,,,9
+General-0-20220621-23:35:43-24663,scalar,Network.node[4].app,Packets from 7 to 4,,,8
+General-0-20220621-23:35:43-24663,scalar,Network.node[5].app,Average delay,,,42.036073403735
+General-0-20220621-23:35:43-24663,scalar,Network.node[5].app,Number of packets,,,89
+General-0-20220621-23:35:43-24663,scalar,Network.node[5].app,Packets from 0 to 5,,,6
+General-0-20220621-23:35:43-24663,scalar,Network.node[5].app,Packets from 1 to 5,,,7
+General-0-20220621-23:35:43-24663,scalar,Network.node[5].app,Packets from 2 to 5,,,10
+General-0-20220621-23:35:43-24663,scalar,Network.node[5].app,Packets from 3 to 5,,,6
+General-0-20220621-23:35:43-24663,scalar,Network.node[5].app,Packets from 4 to 5,,,15
+General-0-20220621-23:35:43-24663,scalar,Network.node[5].app,Packets from 5 to 5,,,20
+General-0-20220621-23:35:43-24663,scalar,Network.node[5].app,Packets from 6 to 5,,,26
+General-0-20220621-23:35:43-24663,scalar,Network.node[5].app,Packets from 7 to 5,,,6
+General-0-20220621-23:35:43-24663,scalar,Network.node[6].app,Average delay,,,43.184677726935
+General-0-20220621-23:35:43-24663,scalar,Network.node[6].app,Number of packets,,,80
+General-0-20220621-23:35:43-24663,scalar,Network.node[6].app,Packets from 0 to 6,,,10
+General-0-20220621-23:35:43-24663,scalar,Network.node[6].app,Packets from 1 to 6,,,5
+General-0-20220621-23:35:43-24663,scalar,Network.node[6].app,Packets from 2 to 6,,,3
+General-0-20220621-23:35:43-24663,scalar,Network.node[6].app,Packets from 3 to 6,,,6
+General-0-20220621-23:35:43-24663,scalar,Network.node[6].app,Packets from 4 to 6,,,10
+General-0-20220621-23:35:43-24663,scalar,Network.node[6].app,Packets from 5 to 6,,,17
+General-0-20220621-23:35:43-24663,scalar,Network.node[6].app,Packets from 6 to 6,,,23
+General-0-20220621-23:35:43-24663,scalar,Network.node[6].app,Packets from 7 to 6,,,13
+General-0-20220621-23:35:43-24663,scalar,Network.node[7].app,Average delay,,,35.298710994413
+General-0-20220621-23:35:43-24663,scalar,Network.node[7].app,Number of packets,,,72
+General-0-20220621-23:35:43-24663,scalar,Network.node[7].app,Packets from 0 to 7,,,15
+General-0-20220621-23:35:43-24663,scalar,Network.node[7].app,Packets from 1 to 7,,,5
+General-0-20220621-23:35:43-24663,scalar,Network.node[7].app,Packets from 2 to 7,,,4
+General-0-20220621-23:35:43-24663,scalar,Network.node[7].app,Packets from 3 to 7,,,6
+General-0-20220621-23:35:43-24663,scalar,Network.node[7].app,Packets from 4 to 7,,,4
+General-0-20220621-23:35:43-24663,scalar,Network.node[7].app,Packets from 5 to 7,,,13
+General-0-20220621-23:35:43-24663,scalar,Network.node[7].app,Packets from 6 to 7,,,9
+General-0-20220621-23:35:43-24663,scalar,Network.node[7].app,Packets from 7 to 7,,,23
