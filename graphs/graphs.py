@@ -5,25 +5,25 @@ import matplotlib.pyplot as plt
 # from measurement import Measurement
 
 filenames = [
-    # "../data/Clockwise_algorithm/CLOCKWISE_ALGORITHM_Case_I_vectors_intv_1_0.csv",
-    # "../data/Short_flood_algorithm/SHORT_FLOOD_ALGORITHM_Case_I_vectors_intv_1_0.csv",
-    # "../data/Chained_hello_algorithm/CHAINED_HELLO_ALGORITHM_Case_I_vectors_intv_1_0.csv",
+    # done #"../data/Clockwise_algorithm/CLOCKWISE_ALGORITHM_Case_I_vectors_intv_1_0.csv",
+    # done #"../data/Short_flood_algorithm/SHORT_FLOOD_ALGORITHM_Case_I_vectors_intv_1_0.csv",
+    # done #"../data/Chained_hello_algorithm/CHAINED_HELLO_ALGORITHM_Case_I_vectors_intv_1_0.csv",
     #
     # "../data/Clockwise_algorithm/CLOCKWISE_ALGORITHM_Case_I_vectors_intv_2_0.csv",
     # "../data/Short_flood_algorithm/SHORT_FLOOD_ALGORITHM_Case_I_vectors_intv_2_0.csv",
     # "../data/Chained_hello_algorithm/CHAINED_HELLO_ALGORITHM_Case_I_vectors_intv_2_0.csv",
     ###############
-    # "../data/Clockwise_algorithm/CLOCKWISE_ALGORITHM_Case_II_vectors_intv_1_0.csv",
-    # "../data/Short_flood_algorithm/SHORT_FLOOD_ALGORITHM_Case_II_vectors_intv_1_0.csv",
-    # "../data/Chained_hello_algorithm/CHAINED_HELLO_ALGORITHM_Case_II_vectors_intv_1_0.csv",
+    # done #"../data/Clockwise_algorithm/CLOCKWISE_ALGORITHM_Case_II_vectors_intv_1_0.csv",
+    # done #"../data/Short_flood_algorithm/SHORT_FLOOD_ALGORITHM_Case_II_vectors_intv_1_0.csv",
+    # done #"../data/Chained_hello_algorithm/CHAINED_HELLO_ALGORITHM_Case_II_vectors_intv_1_0.csv",
     #
     # "../data/Clockwise_algorithm/CLOCKWISE_ALGORITHM_Case_II_vectors_intv_2_0.csv",
     # "../data/Short_flood_algorithm/SHORT_FLOOD_ALGORITHM_Case_II_vectors_intv_2_0.csv",
     # "../data/Chained_hello_algorithm/CHAINED_HELLO_ALGORITHM_Case_II_vectors_intv_2_0.csv",
     ###############
-    "../data/Clockwise_algorithm/CLOCKWISE_ALGORITHM_Case_III_vectors_intv_1_0.csv",
-    "../data/Short_flood_algorithm/SHORT_FLOOD_ALGORITHM_Case_III_vectors_intv_1_0.csv",
-    "../data/Chained_hello_algorithm/CHAINED_HELLO_ALGORITHM_Case_III_vectors_intv_1_0.csv",
+    # done # "../data/Clockwise_algorithm/CLOCKWISE_ALGORITHM_Case_III_vectors_intv_1_0.csv",
+    # done # "../data/Short_flood_algorithm/SHORT_FLOOD_ALGORITHM_Case_III_vectors_intv_1_0.csv",
+    # done # "../data/Chained_hello_algorithm/CHAINED_HELLO_ALGORITHM_Case_III_vectors_intv_1_0.csv",
     #
     # "../data/Clockwise_algorithm/CLOCKWISE_ALGORITHM_Case_III_vectors_intv_2_0.csv",
     # "../data/Short_flood_algorithm/SHORT_FLOOD_ALGORITHM_Case_III_vectors_intv_2_0.csv",
@@ -100,7 +100,6 @@ def graph_individual_stacked(graph_name, data):
             if (len(x_axis) > 1):
                 ax[node-4].plot(x_axis, y_axis, label=f"Nodo {node} gate {gate}")
                 ax[node-4].legend()
-
     plt.style.use("ggplot")
     plt.legend()
     plt.suptitle(f"Buffers individuales de {formatted_label(graph_name)}")
@@ -167,7 +166,7 @@ def formatted_label(label):
     dec = aux[-1]
     aux = aux[:-2]
     aux.append(f"{units}.{dec}")
-    return " ".join(aux).lower().title()
+    return " ".join(aux).lower().title().replace("Ii ", "II ").replace("Iii ", "III ")
 
 
 def main():
