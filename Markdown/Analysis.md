@@ -33,17 +33,42 @@ Una red de anillo es una topología de red en la que cada nodo se conecta exacta
 
 # Algoritmo original
 
+> Hipotesis generales sobre el algoritmo: 
+  Este algortimos no realiza ninguna evaluación sobre el paquete ni sobre la topologia de la red, solo comprueba si el nodo actual es el destino en cuyo caso lo envia a la capa de aplicacion en caso contrario envia el paquete siempre hacia la linea en sentido horario del nodo.
+  Esto puede provocar a simple vista un completa falta de uso de la caracteristica full-duplex de la red, en direccion opuesta hacia donde se mandan los paquetes. 
+  Ya que en ninguna circunstancia se envia paquetes hacia el sentido horario, esto provoca un general desuso del ancho de banda de la red.
+
 ## Caso I: Dos nodos envían paquetes
 
 > El nodo 0 y nodo 2 envían paquetes al nodo 5
+
+> Hipotesis sobre el caso I:
+ En este caso, se puede contemplar que el nodo 2 congestionara inecesariamente el lado derecho del anillo, ya que existe un una mejor ruta; en particular aumentando el uso de los buffers del nodo 0 el cual es un punto donde se encuetran los paquetes generados por el nodo 2 y del mismo nodo 0.
+ Esto provocara un aumento del delay medio de los paquetes cuando llegan a destino (Nodo 5).
+
+> Resultados:.
+  <!-- Tabla de Datos Caso I-->
 
 ## Caso II: Todos envían paquetes
 
 > Todos los paquetes menos el 5 envían paquetes al nodo 5
 
+> Hipotesis sobre el caso II:
+En este caso, se nota de manera mas evidente la congestión de la red, ya que todos los nodos envian en sentido horario incluso el nodo que esta a un solo un salto del destino.
+Esto aumentara el delay medio de todos los paquetes enviados por los distintos nodos, viendose los mas afectados los del nodo 4 el cual es el nodo en inmediatamente despues (en sentido horario) del nodo 5.
+
+> Resultados:.
+  <!-- Tabla de Datos Caso II-->
+
 ## Caso III: Random
 
 > Cada paquete puede enviar paquetes a cualquier otro siguiendo una distribución uniforme
+
+Hipotesis sobre el caso II:
+ En este caso, al ser aleatorio, lo unico que se puede asegurar es el desuso de la caracteristica full-duplex de la red.
+
+> Resultados:.
+  <!-- Tabla de Datos Caso III-->
 
 ## Conclusión
 
@@ -58,7 +83,7 @@ Una red de anillo es una topología de red en la que cada nodo se conecta exacta
 
 ## Pasos del algoritmo
 
-1. Cuando un `nodo x` *(nodo de origen)* necesita mandar un paquete a un destino `nodo y`, se inicializa el contador de saltos (`hoops`) en 0 y envía el paquete a sus 2 vecinos, generando así un paquete a la izquierda y otro a la derecha.
+1. Cuando un `nodo x` *(nodo de origen)* necesita mandar un paquete a un destino `nodo y`, se inicializa el contador de saltos (`hoops`) en 0 y envía el paquete a sus 2 vecinos, generando así un paquete en sentido anti-horario y otro en sentido horario.
 
 2. Por cada nodo que se recibe el paquete, si no es el destino, el hoops aumenta en uno y se compara el valor de este:
     - Si `hoops < 4` => se pasa al siguiente nodo.
@@ -71,6 +96,10 @@ Este proceso ocurre sucesivamente hasta encontrar el nodo de destino `y`.
 
 
 La *cantidad de máxima de hoops* permite que la inundación utilice los mínimos recursos posibles mientras también se garantiza que un paquete llegue a cualquier destino del anillo.
+
+> Hipotesis generales sobre el algoritmo:
+  En este algortimo se utiliza la idea de inundación selectiva, esto provoca una mejora significativa en el delay medio de los paquetes, ya que no solo se tiene en cuenta la ruta en sentido horario sino también en sentido anti-horario.
+  De la misma manera, se congestionara la red por la naturaleza de la inundación.
 
 # Análisis
 ## Caso I: Dos nodos envían paquetes
@@ -104,11 +133,11 @@ La *cantidad de máxima de hoops* permite que la inundación utilice los mínimo
 
 ## Pasos del algoritmo
 
-1. Existe un `nodo x` que es el encargado de iniciar la cadena de HELLO, (en nuestro caso lo definimos como el nodo 0). Este `nodo x` envía quién es (su index) y se lo pasa al vecino que tiene a su derecha con un *mensaje hello de listas enlazadas*.
+1. Existe un `nodo x` que es el encargado de iniciar la cadena de HELLO, (en nuestro caso lo definimos como el nodo 0). Este `nodo x` envía quién es (su index) y se lo pasa al vecino que tiene en sentido horario con un *mensaje hello de listas enlazadas*.
 
 > `hello = [nodo[x]]`
 
-2. Luego el vecino a la derecha del `nodo x`, el `nodo a`, anota quién es y se lo pasa a su vez a *su* vecino de la derecha, `nodo b`.
+2. Luego el vecino en sentido horario del `nodo x`, el `nodo a`, anota quién es y se lo pasa a su vez a *su* vecino en sentido horario, `nodo b`.
     - Este proceso ocurre sucesivamente.
 
 > `hello = [nodo[x], nodo[a], nodo[b], ...]`
