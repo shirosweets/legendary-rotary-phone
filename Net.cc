@@ -11,7 +11,7 @@
 #define SHORT_FLOOD_ALGORITHM 1
 #define CHAINED_HELLO_ALGORITHM 2
 
-#define CURRENT_ALGORITM CLOCKWISE_ALGORITHM
+#define CURRENT_ALGORITM SHORT_FLOOD_ALGORITHM
 
 using namespace omnetpp;
 
@@ -49,7 +49,7 @@ Net::Net() {
 }
 
 Net::~Net() {
-	delete(startHelloEvent);
+	cancelAndDelete(startHelloEvent);
 	if(routingTable != NULL){
 		delete(routingTable);
 	}

@@ -4,6 +4,7 @@ simple App
         volatile double interArrivalTime = default(0); // sec
         int packetByteSize = default(125); // bytes
         volatile int destination = default(0);
+        int amountHosts;
         @display("i=block/app");
     gates:
         inout toNet;
