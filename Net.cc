@@ -11,7 +11,7 @@
 #define SHORT_FLOOD_ALGORITHM 1
 #define CHAINED_HELLO_ALGORITHM 2
 
-#define CURRENT_ALGORITM CLOCKWISE_ALGORITHM
+#define CURRENT_ALGORITM SHORT_FLOOD_ALGORITHM
 
 using namespace omnetpp;
 
@@ -84,6 +84,7 @@ void Net::handleMessage(cMessage *msg) {
 	} else {
 		Packet *pkt = (Packet *) msg;
 		if (pkt->getKind() == 31000) {
+		    std::cout << "IF = " << "\n";
 			handleHelloPacket((Hello*)msg);
 		} else {
 			handleDataPacket(pkt);
@@ -101,7 +102,11 @@ int Net::getArrivalGateIndex(cMessage *msg) {
 }
 
 void Net::handleDataPacket(Packet *pkt) {
-	pkt->setHopCount(pkt->getHopCount() + 1);
+	std::cout << "HopCount = " << pkt->getHopCount() << "\n";
+	if (pkt->getSource() != this->getParentModule()->getIndex()){
+	    pkt->setHopCount(pkt->getHopCount() + 1);
+	    std::cout << "HopCount = " << pkt->getHopCount() << "\n";
+	}
 	std::cout << "handling data packet on node[" << this->getParentModule()->getIndex();
 	std::cout << "] with destination of node[" << pkt->getDestination() << "]\n";
     if (pkt->getDestination() == this->getParentModule()->getIndex()) {
