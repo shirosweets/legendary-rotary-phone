@@ -5,9 +5,29 @@ import matplotlib.pyplot as plt
 # from measurement import Measurement
 
 filenames = [
-    "../data/Clockwise_algorithm/CLOCKWISE_ALGORITHM_Case_I_vectors_intv_1_0.csv",
-    "../data/Short_flood_algorithm/SHORT_FLOOD_ALGORITHM_Case_I_vectors_intv_1_0.csv",
-    "../data/Chained_hello_algorithm/CHAINED_HELLO_ALGORITHM_Case_I_vectors_intv_1_0.csv",
+    # "../data/Clockwise_algorithm/CLOCKWISE_ALGORITHM_Case_I_vectors_intv_1_0.csv",
+    # "../data/Short_flood_algorithm/SHORT_FLOOD_ALGORITHM_Case_I_vectors_intv_1_0.csv",
+    # "../data/Chained_hello_algorithm/CHAINED_HELLO_ALGORITHM_Case_I_vectors_intv_1_0.csv",
+    #
+    # "../data/Clockwise_algorithm/CLOCKWISE_ALGORITHM_Case_I_vectors_intv_2_0.csv",
+    # "../data/Short_flood_algorithm/SHORT_FLOOD_ALGORITHM_Case_I_vectors_intv_2_0.csv",
+    # "../data/Chained_hello_algorithm/CHAINED_HELLO_ALGORITHM_Case_I_vectors_intv_2_0.csv",
+    ###############
+    # "../data/Clockwise_algorithm/CLOCKWISE_ALGORITHM_Case_II_vectors_intv_1_0.csv",
+    # "../data/Short_flood_algorithm/SHORT_FLOOD_ALGORITHM_Case_II_vectors_intv_1_0.csv",
+    # "../data/Chained_hello_algorithm/CHAINED_HELLO_ALGORITHM_Case_II_vectors_intv_1_0.csv",
+    #
+    # "../data/Clockwise_algorithm/CLOCKWISE_ALGORITHM_Case_II_vectors_intv_2_0.csv",
+    # "../data/Short_flood_algorithm/SHORT_FLOOD_ALGORITHM_Case_II_vectors_intv_2_0.csv",
+    # "../data/Chained_hello_algorithm/CHAINED_HELLO_ALGORITHM_Case_II_vectors_intv_2_0.csv",
+    ###############
+    "../data/Clockwise_algorithm/CLOCKWISE_ALGORITHM_Case_III_vectors_intv_1_0.csv",
+    "../data/Short_flood_algorithm/SHORT_FLOOD_ALGORITHM_Case_III_vectors_intv_1_0.csv",
+    "../data/Chained_hello_algorithm/CHAINED_HELLO_ALGORITHM_Case_III_vectors_intv_1_0.csv",
+    #
+    # "../data/Clockwise_algorithm/CLOCKWISE_ALGORITHM_Case_III_vectors_intv_2_0.csv",
+    # "../data/Short_flood_algorithm/SHORT_FLOOD_ALGORITHM_Case_III_vectors_intv_2_0.csv",
+    # "../data/Chained_hello_algorithm/CHAINED_HELLO_ALGORITHM_Case_III_vectors_intv_2_0.csv",
 ]
 
 
@@ -29,6 +49,7 @@ def get_data_from_file(filename):
                 dic[node][link]["y_axis"] = y_axis
         return dic
 
+
 def get_gate_from_name(name):
     node = int(name.strip("Network.node[")[0])
     link = int(name[-2])
@@ -36,13 +57,16 @@ def get_gate_from_name(name):
 
 
 def main():
-    data_list = []
+    data_dict = {}
     for file in filenames:
-        data_list.append(get_data_from_file(file))
-    graph_average_buffer(data_list)
+        data_dict[file.split("/")[-1].split(".")[-2]] = get_data_from_file(file)
+    graph_average_buffer(data_dict)
+    for data in data_dict:
+        # graph_individual(data, data_dict[data])
+        graph_individual_stacked(data, data_dict[data])
 
 
-def graph_individual(data):
+def graph_individual(graph_name, data):
     fig, ax = plt.subplots()
     for node in range(8):
         for gate in range(2):
@@ -53,8 +77,45 @@ def graph_individual(data):
 
     plt.style.use("ggplot")
     plt.legend()
-    plt.title("Buffers individuales")
+    plt.title(f"Buffers individuales de {formatted_label(graph_name)}")
     plt.xlabel("Tiempo [s]")
+    plt.yscale("log")
+    plt.ylabel("Tamaño de buffer")
+    plt.show()
+
+
+def graph_individual_stacked(graph_name, data):
+    fig, ax = plt.subplots(4)
+    for node in range(4):
+        for gate in range(2):
+            x_axis = data[node][gate]["x_axis"]
+            y_axis = data[node][gate]["y_axis"]
+            if (len(x_axis) > 1):
+                ax[node].plot(x_axis, y_axis, label=f"Nodo {node} gate {gate}")
+                ax[node].legend()
+
+    plt.style.use("ggplot")
+    plt.legend()
+    plt.suptitle(f"Buffers individuales de {formatted_label(graph_name)}")
+    plt.xlabel("Tiempo [s]")
+    # plt.yscale("log")
+    plt.ylabel("Tamaño de buffer")
+    plt.show()
+
+    fig, ax = plt.subplots(4)
+    for node in range(4, 8):
+        for gate in range(2):
+            x_axis = data[node][gate]["x_axis"]
+            y_axis = data[node][gate]["y_axis"]
+            if (len(x_axis) > 1):
+                ax[node-4].plot(x_axis, y_axis, label=f"Nodo {node} gate {gate}")
+                ax[node-4].legend()
+
+    plt.style.use("ggplot")
+    plt.legend()
+    plt.suptitle(f"Buffers individuales de {formatted_label(graph_name)}")
+    plt.xlabel("Tiempo [s]")
+    # plt.yscale("log")
     plt.ylabel("Tamaño de buffer")
     plt.show()
 
@@ -67,13 +128,10 @@ def get_average_buffer_data(data, group_time=2):
     while slice < UPPER_LIMIT:
         grouped_vector[slice] = []
         slice += group_time
-    print(grouped_vector)
     for key in grouped_vector:
         for point in sorted_flat_vector:
             if(point[0] > key and point[0] < key+group_time):
                 grouped_vector[key].append(point)
-    # for group in grouped_vector:
-    #     print(f"[{group}-{group+group_time}] :: {grouped_vector[group]}")
     x_axis = []
     y_axis = []
     for group in grouped_vector:
@@ -86,12 +144,12 @@ def get_average_buffer_data(data, group_time=2):
     return (x_axis, y_axis)
 
 
-def graph_average_buffer(data_list):
+def graph_average_buffer(data_dict):
     fig, ax = plt.subplots()
     group_time = 2
-    for data in data_list:
-        x_axis, y_axis = get_average_buffer_data(data, group_time)
-        ax.plot(x_axis, y_axis, label=f"unu")
+    for key in data_dict:
+        x_axis, y_axis = get_average_buffer_data(data_dict[key], group_time)
+        ax.plot(x_axis, y_axis, label=formatted_label(key))
 
     plt.style.use("ggplot")
     plt.legend()
@@ -112,44 +170,19 @@ def flatten_points(data):
                 flat_vector.append((x_axis[i], y_axis[i]))
     return flat_vector
 
-# def graph(
-#     measurements,
-#     x_tag,
-#     y_tag,
-#     x_label,
-#     y_label,
-#     graph_title,
-#     xlambda=None,
-#     ylambda=None
-# ):
-#     axis = get_axis_data(
-#         [m.to_dictionary() for m in measurements],
-#         x_tag,
-#         y_tag
-#     )
-#     fig, ax = plt.subplots()
-#     for case in axis:
-#         print(f"y points for case {case}: {axis[case]['y_points']}")
-#         x_points = axis[case]["x_points"]
-#         y_points = axis[case]["y_points"]
 
-#         if (xlambda is not None):
-#             x_points = list(map(xlambda, x_points))
-
-#         if (ylambda is not None):
-#             y_points = list(map(ylambda, y_points))
-
-#         ax.plot(x_points, y_points, label=case)
-#     plt.style.use("ggplot")
-#     plt.legend()
-#     plt.title(graph_title)
-#     plt.xlabel(x_label)
-#     plt.ylabel(y_label)
-#     plt.show()
+def formatted_label(label):
+    aux = label.replace("vectors_", "").split("_")
+    units = aux[-2]
+    dec = aux[-1]
+    aux = aux[:-2]
+    aux.append(f"{units}.{dec}")
+    return " ".join(aux).lower().title()
 
 
 if __name__ == "__main__":
     main()
+
 
 # #######
 
