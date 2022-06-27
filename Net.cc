@@ -11,7 +11,7 @@
 #define SHORT_FLOOD_ALGORITHM 1
 #define CHAINED_HELLO_ALGORITHM 2
 
-#define CURRENT_ALGORITM SHORT_FLOOD_ALGORITHM
+#define CURRENT_ALGORITM CHAINED_HELLO_ALGORITHM
 
 using namespace omnetpp;
 
@@ -58,8 +58,10 @@ Net::~Net() {
 void Net::initialize() {
 	startHelloEvent = new cMessage("startHelloEvent");
 	isTopologyKnown = false;
-	routingTable = NULL;
-
+	routingTable = new int[RING_SIZE];
+	for(unsigned int i = 0; i<RING_SIZE; i++){
+		routingTable[i] = 0;
+	}
 	if (CURRENT_ALGORITM == CHAINED_HELLO_ALGORITHM) {
 		if (this->getParentModule()->getIndex() == 0) {
 			// Inicializamos la exploración de topología
@@ -197,7 +199,6 @@ void Net::handleHelloPacket(Hello *hello) {
 
 void Net::saveTopologyData() {
 	std::cout << "Saving Topology Data in node: " << this->getParentModule()->getIndex() << "\n";
-	routingTable = new int[RING_SIZE];
 	int m,k;
 	int n = RING_SIZE - 1;
 	int leftDistance;
